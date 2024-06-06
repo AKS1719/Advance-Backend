@@ -17,7 +17,7 @@ const registerUser = asyncHandler(async (req,res)=>{
 
 
     const {fullName,email,username,password} = req.body;
-    console.log(fullName,email,username,password)
+    // console.log(fullName,email,username,password)
 
     // if(fullName===""){
     //     throw new ApiError(400,"Full Name is Required")
@@ -27,7 +27,7 @@ const registerUser = asyncHandler(async (req,res)=>{
         throw new ApiError(400,"All fields are required")
     }
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         // $or will find any means if username exists it will give username or if email is present it will give the usernam
         // likewise we have many operators liek $and etc 
         $or: [{username},{email}]
@@ -38,22 +38,29 @@ const registerUser = asyncHandler(async (req,res)=>{
         throw new ApiError(409,"User with email or username already Exists!")
     }
 
+    // console.log("usercontroller req.files ",req.files)
                                     // same nam
     const avatarLocalPath = req.files?.avatar[0]?.path
-    // console.log(req.files)
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path
+
+
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath){
-        throw new ApiError(400,"Avatar  file is required")
+        throw new ApiError(400,"Avatar local file is required")
     }
 
     // uploading on cloudinary 
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
-
+    // console.log(avatar)
     if(!avatar){
-        throw new ApiError(400,"Avatar  file is required")
+        
+        throw new ApiError(400,"Avatar file is required")
     }
 
     // database entry
@@ -62,7 +69,7 @@ const registerUser = asyncHandler(async (req,res)=>{
         {
             fullName:fullName,
             avatar:avatar.url,
-            coverImage:coverImage.url?.url || "",
+            coverImage:coverImage?.url || "",
             username:username.toLowerCase(),
             email:email,
             password:password
