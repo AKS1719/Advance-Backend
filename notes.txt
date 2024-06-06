@@ -15,3 +15,22 @@ so we make a gitkeep file through which it can be recognized
     database is always is on other continent
 
     always use async wait 
+
+// custom errors
+    
+    -> to make a standard of error sending in our backend
+
+// custom resonse 
+
+// user model 
+// video model 
+
+// jwt 
+    -> it is a bearer token
+    -> whoever has the token it sends data to them
+// pre hooks 
+
+
+
+
+// session and cookies
