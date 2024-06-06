@@ -1,3 +1,17 @@
 if we create empty folder the git command cannot able to track it 
 git only tracks the file 
 so we make a gitkeep file through which it can be recognized 
+
+
+
+// connecting database 
+
+    -> goto mongodb atlas 
+    -> create a project 
+    -> creaate cluster
+
+    always wrap the connecting the databse code in trycatch block 
+
+    database is always is on other continent
+
+    always use async wait 
