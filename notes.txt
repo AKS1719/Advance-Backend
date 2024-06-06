@@ -1,0 +1,3 @@
+if we create empty folder the git command cannot able to track it 
+git only tracks the file 
+so we make a gitkeep file through which it can be recognized 
