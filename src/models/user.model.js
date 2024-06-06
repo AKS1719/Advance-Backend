@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken";
-import bcrypt from bcrypt
+import bcrypt from 'bcrypt'
 
 const userSchema = new mongoose.Schema(
     {
@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema(
 // since this hook is a pre hook even a user is changing his or her avatar or any data changes excluding password then also the password will be hashed again which is bad approach
 userSchema.pre("save",async function(next){
     if(!this.isModified("password"))return next();
-    this.password  = bcrypt.hash(this.password,10)
+    this.password  = await bcrypt.hash(this.password,10)
     next()
 })
 
