@@ -7,24 +7,24 @@ import { app } from './app.js'
 
 
 dotenv.config({
-    path:'./.env'
+    path: './.env'
 })
 
 
 // we are not returning anything but our async method always returns a promise 
 connectDB()
-.then(()=>{
-    app.listen(process.env.PORT || 8000,()=>{
-        console.log(`app running in http://localhost:${process.env.PORT}`)
+    .then(() => {
+        app.listen(process.env.PORT || 8000, () => {
+            console.log(`app running in http://localhost:${process.env.PORT}`)
+        })
+        app.on("error", (err) => {
+            console.log(err);
+            throw err;
+        })
     })
-    app.on("error",(err)=>{
-        console.log(err);
-        throw err;
+    .catch((errr) => {
+        console.log("Mongo Db connection failed !!", errr)
     })
-})
-.catch((errr)=>{
-    console.log("Mongo Db connection failed !!",errr)
-})
 
 
 

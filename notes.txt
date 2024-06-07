@@ -80,3 +80,72 @@ refresh token are long lived and stored in the data base the refresh token stays
 
 earlier only the access tokens were their but then google propose the tow token scheme in its research paper
 
+
+
+// subscription model 
+
+in user model we don't have the number of user subscribed in the user model 
+
+so in the show profile page how to display them?
+
+and suppose if you are a user and u looked for a user and if you are subscribed to the channel or user you see subscribed not subscribe which says you to subscribe these all thing are not in the user model through which we can set them 
+
+
+// mongodb aggregation pipeline
+
+ joining subscription model to  user model
+
+
+
+[
+    {},
+    {},
+    {}
+]
+
+this is the way of writing pipeline
+
+//examples
+[
+    {
+        // stages 
+        // how to join tow collection
+        $lookup:{
+            from : "authors,
+            localField:"author_id,
+            foreignField:"_id",
+            as : "test"
+        }
+    }
+]
+
+
+gives the array named test 
+
+the test array contains further objects the first object is only usefull
+
+
+//examples
+[
+    {
+        // stages 
+        // how to join tow collection
+        $lookup:{
+            from : "authors,
+            localField:"author_id,
+            foreignField:"_id",
+            as : "author_details"
+        }
+    },
+    {
+        $addFields:{
+            author_details:{
+                // $first: "$author_details or
+                arrayElementAt : {"$author}
+            }
+        }
+    }
+]
+
+
+
