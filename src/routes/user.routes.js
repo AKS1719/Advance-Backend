@@ -45,7 +45,7 @@ router.route('/current-user').get(verifyJWT, getCurrentUser)
 router.route('/update-account').patch(verifyJWT, updateAccountDetails)
 
 router.route('/avatar').patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
-router.route('/coverImage').patch(verifyJWT, upload.single("/coverImage"), updateUserCoverImage)
+router.route('/coverImage').patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
 
 
 // when taking the value from params

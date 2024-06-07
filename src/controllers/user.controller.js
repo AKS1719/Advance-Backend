@@ -191,8 +191,11 @@ const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined,
+            // $set: {
+            //     refreshToken: undefined,
+            // }
+            $unset: {
+                refreshToken: 1, // this removes the field from document
             }
         },
         {
@@ -216,7 +219,9 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
+
+    // cookie was giving error put cookies
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
     if (!incomingRefreshToken) {
         throw new ApiError(401, "unauthorized request")
     }
@@ -269,7 +274,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body
     // req.user it is available due to the middle ware so we don't need to ccare about taking email and finding that user and then change
     // if the user is able to change the passwrod means he/she is logged in which gives req.user
-
+    // console.log(oldPassword)
     const user = await User.findById(req.user?._id)
 
     const isPasswordValid = await user.isPasswordCorrect(oldPassword)
@@ -401,6 +406,7 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
         throw new ApiError(400,"Username is missing")
     }
 
+    // console.log(username)
     
     const channel = await User.aggregate([
         {
@@ -433,7 +439,7 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
                     $size : "$subscribers"
                 },
                 channelSubscribedToCount:{
-                    $size: "subscribedTo"
+                    $size: "$subscribedTo"
                 },
                 isSubscribed:{
                     $cond:{
@@ -510,8 +516,8 @@ const getWatchHistory = asyncHandler(async (req,res)=>{
                     },
                     {
                         $addFields:{
-                            Owener:{
-                                $first:"Owner"
+                            Owner:{
+                                $first:"$Owner"
                             }
                         }
                     }
