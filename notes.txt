@@ -57,3 +57,16 @@ go on exali draw
 // controllers
 
 
+// Refrsh token and access token
+
+
+-> refresh token 
+
+    long lived -> 1day
+    it compares the use refresh token and if the refresh token matches then it generates the access token
+
+-> access token
+
+    short lived -> 15 min
+
+    example: authentication related stuff till that time without authentication
