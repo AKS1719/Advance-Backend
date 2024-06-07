@@ -70,3 +70,13 @@ go on exali draw
     short lived -> 15 min
 
     example: authentication related stuff till that time without authentication
+
+
+the main usage of access token and refresh token is that the user does not have to give their email and password again and again 
+
+access token is short lived  due to which after the expiration of the acess token user need to reenter their email and password
+
+refresh token are long lived and stored in the data base the refresh token stays with the user to and when the user tries just scroll something or other things which do not require authentication they can do all that stufff 
+
+earlier only the access tokens were their but then google propose the tow token scheme in its research paper
+
