@@ -4,6 +4,7 @@ import { User } from '../models/user.model.js'
 import { uploadOnCloudinary } from '../utils/cloudinary.js'
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
@@ -472,6 +473,65 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
 
 })
 
+
+const getWatchHistory = asyncHandler(async (req,res)=>{
+    // the id provided by the mongo db is converted by mangoose behing the scenes 
+    // but when we're wirting the agrregation we write in the mongodb syntact therefore we need to convert 
+    // the id into mongodb id
+    const user = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup:{
+                from:"videos",
+                localField:"watchHistory",
+                foreignField:"_id",
+                as:"watchHistory",
+                pipeline:[
+                    {
+                        $lookup:{
+                            from:"users",
+                            localField:"Owner",
+                            foreignField:"_id",
+                            as:"Owner",
+                            pipeline:[
+                                {
+                                    $project:{
+                                        fullName:1,
+                                        username:1,
+                                        avatar:1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $addFields:{
+                            Owener:{
+                                $first:"Owner"
+                            }
+                        }
+                    }
+                ]
+            } // this lookup will give only the data in the videos but in vides we want the owners too for that we use nested lookups
+        }
+    ])
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            user[0].watchHistory,
+            "Watch history fetched successfully "
+        )
+    )
+
+})
+
 export {
     registerUser,
     loginUser,
@@ -483,4 +543,5 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
+    getWatchHistory,
 };
