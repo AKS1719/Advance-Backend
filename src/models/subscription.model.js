@@ -9,7 +9,7 @@ const subscriptionSchema = new Schema(
             ref: "User"
         },
         channel: {
-            type: Schema.type.ObjectId, // one who is getting subscribed
+            type: Schema.Types.ObjectId, // one who is getting subscribed
             ref: "User"
         }
     },
